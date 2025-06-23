@@ -21,7 +21,7 @@ await connectCloudinary();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://shivmart.onrender.com/",
     credentials: true  // ✅ this is correct
 }));
 
