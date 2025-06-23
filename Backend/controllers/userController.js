@@ -23,6 +23,7 @@ export const register =async(req,res)=>{
 
     const token =Jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"7d"});
   
+    console.log(token);
 
     res.cookie('token',token,{
         httpOnly:true,
@@ -30,6 +31,7 @@ export const register =async(req,res)=>{
         sameSite:process.env.NODE_ENV === "production"?"none":"strict",
         maxAge:7*24*60*60*1000
     })
+
       return res.status(201).json({success:true,user:{
         email:user.email,name:user.name
       }});  
@@ -62,7 +64,7 @@ export const Login = async (req, res) => {
     }
 
     const token = Jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-    // console.log(token);
+    console.log(token);
 
     res.cookie('token', token, {
       httpOnly: true,
