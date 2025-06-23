@@ -41,7 +41,8 @@ export const placeOrderCOD = async (req, res) => {
 
 export const placeOrderRazorpay = async (req, res) => {
     try {
-      const { userId, address, items } = req.body;
+      const {  address, items } = req.body;
+      const {id:userId}=req.user;
   
       if (!address || items.length === 0) {
         return res.status(400).json({ message: 'Invalid data', success: false });

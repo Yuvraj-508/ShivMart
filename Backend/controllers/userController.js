@@ -25,12 +25,13 @@ export const register =async(req,res)=>{
   
     console.log(token);
 
-    res.cookie('token',token,{
-        httpOnly:true,
-        secure:process.env.NODE_ENV === "production",
-        sameSite:process.env.NODE_ENV === "production"?"none":"strict",
-        maxAge:7*24*60*60*1000
-    })
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true, // ✅ required for HTTPS
+      sameSite: 'None', // ✅ allow cross-origin cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+    
 
       return res.status(201).json({success:true,user:{
         email:user.email,name:user.name
@@ -68,10 +69,11 @@ export const Login = async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      secure: true, // ✅ required for HTTPS
+      sameSite: 'None', // ✅ allow cross-origin cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000
     });
+    
 
     return res.status(200).json({
       success: true,

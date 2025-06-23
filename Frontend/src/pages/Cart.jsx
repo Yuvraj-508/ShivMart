@@ -84,58 +84,77 @@ function Cart() {
                 toast.error(data.message);
             }
           }
-          else if(paymentOption==="Online") {   
-            const { data } = await axios.post('/api/order/online', {
-                userId: user._id,
+          else if (paymentOption === "Online") {
+            try {
+              // ✅ Step 1: Create Razorpay order on backend
+              const { data } = await axios.post('/api/order/online', {
                 items: cartArray.map(item => ({
                   product: item._id,
                   quantity: item.quantity,
                 })),
                 address: selectedAddress._id,
               });
+          
               if (data.success) {
                 const { order, razorpayKey } = data;
+          
+                // ✅ Step 2: Configure Razorpay payment options
                 const options = {
-                    key: razorpayKey,
-                    amount: order.amount,
-                    currency: 'INR',
-                    name: 'Your Shop Name',
-                    description: 'Order Payment',
-                    order_id: order.id,
-                    handler: async function (response) {
-                        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
-                      
-                        // Send these to backend for verification
-                        await axios.post('/api/order/verify', {
-                          razorpay_order_id,
-                          razorpay_payment_id,
-                          razorpay_signature,
-                         localOrderId: order.receipt, // Include the local order ID for verification
-                           // Optionally include your own DB order ID
-                        });
-                      
-                        // Clear cart items after successful payment
+                  key: razorpayKey,
+                  amount: order.amount,
+                  currency: 'INR',
+                  name: 'ShivMart',
+                  description: 'Order Payment',
+                  order_id: order.id, // Razorpay order ID
+                  handler: async function (response) {
+                    const {
+                      razorpay_order_id,
+                      razorpay_payment_id,
+                      razorpay_signature
+                    } = response;
+          
+                    try {
+                      // ✅ Step 3: Send payment verification request to backend
+                      const verifyRes = await axios.post('/api/order/verify', {
+                        razorpay_order_id,
+                        razorpay_payment_id,
+                        razorpay_signature,
+                        localOrderId: order.receipt, // Your MongoDB Order ID (used in backend)
+                      });
+          
+                      if (verifyRes.data.success) {
                         setCartItems({});
-                        // Optional UI logic
-                        toast.success("Payment verified successfully!");
-                      
-                      },
-                    prefill: {
-                      name: user.name,
-                      email: user.email,
-                    },
-                    theme: {
-                      color: '#3399cc',
-                    },
-                  };
-            
-                  const rzp = new window.Razorpay(options);
-                  rzp.open();
-                }
-                else{
-                toast.error(data.message);
-        }
-    }   
+                        toast.success("Payment verified and order placed!");
+                        // Optionally redirect to thank-you or order success page
+                      } else {
+                        toast.error("Payment failed to verify. Please contact support.");
+                      }
+                    } catch (err) {
+                      console.error("Verification Error:", err);
+                      toast.error("Verification failed!");
+                    }
+                  },
+                  prefill: {
+                    name: user.name,
+                    email: user.email,
+                  },
+                  theme: {
+                    color: "#3399cc",
+                  },
+                };
+          
+                // ✅ Step 4: Open Razorpay payment window
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+              } else {
+                toast.error(data.message || "Payment setup failed");
+              }
+            } catch (err) {
+              console.error("Online payment error:", err);
+              toast.error("Something went wrong while placing the order");
+            }
+          }
+          
          
       }catch(error){
           console.error("Error placing order:", error);

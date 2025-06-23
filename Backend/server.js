@@ -21,9 +21,9 @@ await connectCloudinary();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://shivmart.onrender.com",
-    credentials: true  // ✅ this is correct
-}));
+    origin: ['http://localhost:5174', 'https://shiv-mart-92pj.vercel.app'],
+    credentials: true
+  }));
 
 app.get('/',(req,res)=>{
     res.send("Hello Shiv Mart");
