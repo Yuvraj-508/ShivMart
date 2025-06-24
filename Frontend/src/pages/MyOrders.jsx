@@ -5,9 +5,10 @@ import { dummyOrders } from '../assets/ShivMart_assets/assets';
 function MyOrders() {
 
     const [myOrders,setMyOrders] = useState([]);
-    const {currency,axios,user} = useAppContext();
+    const {currency,axios,user,loading,setLoading} = useAppContext();
 
     const fetchMyOrders=async()=>{
+     setLoading(true);
        try{
         const {data}= await axios.get('/api/order/user');
         if(data.success){
@@ -15,6 +16,8 @@ function MyOrders() {
        }
     }catch(err){
         console.log(err);
+       }finally{
+       setLoading(false); // Stop loader
        }
       }
     useEffect(()=>{

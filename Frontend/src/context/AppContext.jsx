@@ -18,8 +18,11 @@ export const AppContextProvider = ({ children }) => {
   const [isSeller, setIsSeller] = useState(false);
   const [userLogin, setUserLogin] = useState(null);
    const [products, setProducts] = useState([]);
+   const [loading,setLoading]=useState(false);
    const [cartItems, setCartItems] = useState({});
    const [searchQuery, setSearchQuery] = useState({});
+   const [isSubmitting, setIsSubmitting] = useState(false);
+
 
 
    const sellerStatus =async () => {
@@ -57,11 +60,11 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         setProducts(data.products);
       } else {
-       toast.error(data.message || "Failed to fetch products");
+       toast.error(data.message || "Techinal Error please try again later");
       }
     }catch (error) {
       console.error("Error fetching products:", error);
-      toast.error("Failed to fetch products");
+      toast.error("Techinal Error please try again later");
     }
    }
 
@@ -70,7 +73,6 @@ export const AppContextProvider = ({ children }) => {
      sellerStatus();
      userStatus();
     
-   
    },[])
 
   useEffect(() => {
@@ -177,7 +179,10 @@ const updateToCart=(itemId,quantity)=>{
     axios,
     fetchProducts,
     toast,
-    setCartItems
+    setCartItems,
+    loading,
+    setLoading,
+    isSubmitting, setIsSubmitting,
  
   };
 

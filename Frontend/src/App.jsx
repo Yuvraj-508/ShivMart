@@ -17,11 +17,13 @@ import SellerLayout from "./pages/seller/SellerLayout";
 import AddProduct from "./pages/seller/AddProduct";
 import ProductList from "./pages/seller/ProductList";
 import Orders from "./pages/seller/Orders";
+import Loading from "./components/Loading";
 function App() {
   const isSellerPath = useLocation().pathname.includes("/seller");
-  const { userLogin, isSeller } = useAppContext();
+  const { userLogin, isSeller,loading } = useAppContext();
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
+        {loading && <Loading />}
       {isSellerPath ? null : <Navbar />}
       {userLogin ? <Login /> : null}
       <Toaster />

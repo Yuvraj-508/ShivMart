@@ -5,8 +5,8 @@ export const updateCart = async (req, res) => {
     try {
         const {cartItems} = req.body;
         const {id} = req.user;
-        // console.log("Received cart items:", cartItems);
-        // console.log("Received userId:", id);
+        console.log("Received cart items:", cartItems);
+        console.log("Received userId:", id);
 
         const user = await User.findByIdAndUpdate(id,{cartItems});
         res.status(200).json({

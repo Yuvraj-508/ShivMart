@@ -3,6 +3,7 @@ import { assets, categories } from "../../assets/ShivMart_assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import  toast  from "react-hot-toast";
 function AddProduct() {
+
   const [files, setFiles] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -10,11 +11,13 @@ function AddProduct() {
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
 
-  const {axios}=useAppContext();
+  const {axios,isSubmitting, setIsSubmitting}=useAppContext();
 
   const onSubmitHandler = async(e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
    try{
-     e.preventDefault();
+    
     
      const productData= {
       name,
@@ -44,7 +47,9 @@ function AddProduct() {
   }
    catch(err){
       toast.error(err.response?.data?.message || "Something went wrong");
-   }
+   }finally {
+    setIsSubmitting(false); // Stop loader
+  }
    
   };
   return (
@@ -155,9 +160,18 @@ function AddProduct() {
             />
           </div>
         </div>
-        <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">
-          ADD
-        </button>
+        <button
+  className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer flex items-center justify-center gap-2"
+  type="submit"
+  disabled={isSubmitting}
+>
+  {isSubmitting ? (
+    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+  ) : (
+    "ADD"
+  )}
+</button>
+
       </form>
     </div>
   );
