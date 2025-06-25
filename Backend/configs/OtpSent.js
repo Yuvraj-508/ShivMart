@@ -16,7 +16,5 @@ export const sendOtpEmail = async (email, otp) => {
     html: `<p>Your OTP for ShivMart is <b>${otp}</b>. It will expire in 5 minutes.</p>`,
   };
 
-  transporter.sendMail(mailOptions)
-  .then(info => console.log("Mail sent:", info.response))
-  .catch(err => console.error("Mail error:", err));
+  await transporter.sendMail(mailOptions);
 };
