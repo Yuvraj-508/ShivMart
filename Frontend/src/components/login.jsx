@@ -44,6 +44,7 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
   // Verify OTP
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+      setIsOtpSubmitting(true);
     try {
       const { data } = await axios.post("/api/user/register/verify-otp", {
         email,
@@ -62,12 +63,15 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
     } catch (err) {
       console.error(err);
       toast.error("OTP Verification failed");
+    }finally{
+        setIsOtpSubmitting(false);
     }
   };
 
   // Login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsOtpSubmitting(true);
     try {
       const { data } = await axios.post("/api/user/login", {
         email,
@@ -85,6 +89,8 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
     } catch (err) {
       toast.error(err.response.data.message || "Login failed, please try again");
       console.log(err);
+    }finally{
+        setIsOtpSubmitting(false);
     }
   };
 
