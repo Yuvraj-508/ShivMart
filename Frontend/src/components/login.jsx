@@ -71,8 +71,9 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
   // Login
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsOtpSubmitting(true);
+   
     try {
+        setIsOtpSubmitting(true);
       const { data } = await axios.post("/api/user/login", {
         email,
         password,
