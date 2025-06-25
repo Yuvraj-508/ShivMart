@@ -35,7 +35,7 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
       }
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong");
+      toast.error(err.response.data.message ||"Something went wrong");
     }finally {
         setIsOtpSubmitting(false);
       }
@@ -73,6 +73,7 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
         email,
         password,
       });
+
       if (data.success) {
         toast.success("Login successful");
         setUser(data.user);
@@ -82,8 +83,8 @@ const [isOtpSubmitting, setIsOtpSubmitting] = useState(false);
         toast.error(data.message);
       }
     } catch (err) {
-      toast.error("Login failed");
-      console.error(err);
+      toast.error(err.response.data.message || "Login failed, please try again");
+      console.log(err);
     }
   };
 

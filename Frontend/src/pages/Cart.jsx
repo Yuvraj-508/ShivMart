@@ -164,7 +164,7 @@ function Cart() {
           }
         } catch (err) {
           console.error("Online payment error:", err);
-          toast.error("Something went wrong while placing the order");
+          toast.error("Technical error while placing the order, please try again later.");
         }
       }
     } catch (error) {
@@ -305,7 +305,7 @@ function Cart() {
                 ))}
                 <p
                   onClick={() => navigate("/add-address")}
-                  className="text-primary text-center cursor-pointer p-2 hover:bg-primary-dull"
+                  className="text-primary text-center cursor-pointer p-2 hover:bg-primary-dull hover:text-white"
                 >
                   Add address
                 </p>

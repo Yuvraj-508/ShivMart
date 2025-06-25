@@ -12,10 +12,15 @@ const razorpayInstance = new razorpay({
 // plareOrderCOD function to handle placing an order with Cash on Delivery (COD)
 export const placeOrderCOD = async (req, res) => {
     try {
-        const {userId,address,items}=req.body;
+        const {address,items}=req.body;
+        const {id:userId}=req.user;
+
+        console.log("items",items);
+       
         if ( !address || items.length ===0) {
             return res.status(400).json({ message: 'Invalid data',success:false });
         }
+     
 
         let amount = await items.reduce(async  (acc, item) => {
             const product= await Product.findById(item.product);
